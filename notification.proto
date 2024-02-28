@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+// Notification service definition
+service Notification {
+    rpc NotifyClient(NotifyClientRequest) returns (NotifyClientResponse) {}
+}
+
+message NotifyClientRequest {
+    string updated_item_details = 1;
+}
+
+message NotifyClientResponse {
+    string result = 1;
+}
+

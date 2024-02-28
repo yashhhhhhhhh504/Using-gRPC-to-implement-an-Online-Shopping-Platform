@@ -1,0 +1,116 @@
+syntax = "proto3";
+
+// Enum for item categories
+enum ItemCategory {
+  ELECTRONICS = 0;
+  FASHION = 1;
+  OTHERS = 2;
+}
+
+// Message for registering seller request
+message RegisterSellerRequest {
+  string seller_address = 1;
+  string seller_uuid = 2;
+}
+
+// Message for registering seller response
+message RegisterSellerResponse {
+  enum Status {
+    SUCCESS = 0;
+    FAIL = 1;
+  }
+  Status status = 1;
+  string reason = 2;
+}
+
+// Message for selling an item request
+message SellItemRequest {
+  string product_name = 1;
+  int32 quantity = 2;
+  string description = 3;
+  string seller_address = 4;
+  string seller_uuid = 5;
+  double price_per_unit = 6;
+  oneof category {
+    ItemCategory others_category = 7;
+    ItemCategory fashion_category = 8;
+    ItemCategory electronics_category = 9;
+  }
+}
+
+// Message for selling an item response
+message SellItemResponse {
+  enum Status {
+    SUCCESS = 0;
+    FAIL = 1;
+  }
+  Status status = 1;
+  int32 item_id = 2;
+  string reason = 3;
+}
+
+// Message for updating an item request
+message UpdateItemRequest {
+  int32 item_id = 1;
+  double new_price = 2;
+  int32 new_quantity = 3;
+  string seller_address = 4;
+  string seller_uuid = 5;
+}
+
+// Message for updating an item response
+message UpdateItemResponse {
+  enum Status {
+    SUCCESS = 0;
+    FAIL = 1;
+  }
+  Status status = 1;
+  string reason = 2;
+}
+
+// Message for deleting an item request
+message DeleteItemRequest {
+  int32 item_id = 1;
+  string seller_address = 2;
+  string seller_uuid = 3;
+}
+
+// Message for deleting an item response
+message DeleteItemResponse {
+  enum Status {
+    SUCCESS = 0;
+    FAIL = 1;
+  }
+  Status status = 1;
+  string reason = 2;
+}
+
+// Message for displaying seller's items request
+message DisplaySellerItemsRequest {
+  string seller_address = 1;
+  string seller_uuid = 2;
+}
+
+// Message for displaying seller's items response
+message DisplaySellerItemsResponse {
+  message ItemDetails {
+    int32 item_id = 1;
+    double price = 2;
+    string name = 3;
+    ItemCategory category = 4;
+    string description = 5;
+    int32 quantity_remaining = 6;
+    string seller_address = 7;
+    double rating = 8;
+  }
+  repeated ItemDetails items = 1;
+}
+
+// Service definition for SellerService
+service SellerService {
+  rpc RegisterSeller(RegisterSellerRequest) returns (RegisterSellerResponse);
+  rpc SellItem(SellItemRequest) returns (SellItemResponse);
+  rpc UpdateItem(UpdateItemRequest) returns (UpdateItemResponse);
+  rpc DeleteItem(DeleteItemRequest) returns (DeleteItemResponse);
+  rpc DisplaySellerItems(DisplaySellerItemsRequest) returns (DisplaySellerItemsResponse);
+}

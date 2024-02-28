@@ -1,0 +1,91 @@
+syntax = "proto3";
+
+// Enum for item categories
+enum ItemCategory {
+  ELECTRONICS = 0;
+  FASHION = 1;
+  OTHERS = 2;
+  ANY = 3; // Special category to search for items in any category
+}
+
+// Message for buying an item request
+message BuyItemRequest {
+  int32 item_id = 1;
+  int32 quantity = 2;
+  string buyer_address = 3;
+}
+
+// Message for buying an item response
+message BuyItemResponse {
+  enum Status {
+    SUCCESS = 0;
+    FAIL = 1;
+  }
+  Status status = 1;
+  string reason = 2;
+}
+
+// Message for adding an item to wishlist request
+message AddToWishlistRequest {
+  int32 item_id = 1;
+  string buyer_address = 2;
+}
+
+// Message for adding an item to wishlist response
+message AddToWishlistResponse {
+  enum Status {
+    SUCCESS = 0;
+    FAIL = 1;
+  }
+  Status status = 1;
+  string reason = 2;
+}
+
+// Message for rating an item request
+message RateItemRequest {
+  int32 item_id = 1;
+  string buyer_address = 2;
+  int32 rating = 3;
+}
+
+// Message for rating an item response
+message RateItemResponse {
+  enum Status {
+    SUCCESS = 0;
+    FAIL = 1;
+  }
+  Status status = 1;
+  string reason = 2;
+}
+
+// Message for searching items request
+message SearchItemRequest {
+  string query = 1;
+  ItemCategory category = 2;
+}
+
+// Message for a single item details
+message ItemDetails {
+  int32 item_id = 1;
+  double price = 2;
+  string name = 3;
+  ItemCategory category = 4;
+  string description = 5;
+  int32 quantity_remaining = 6;
+  string seller_address = 7;
+  double rating = 8;
+}
+
+// Message for searching items response
+message SearchItemResponse {
+  repeated ItemDetails items = 1;
+}
+
+// Service definition for ClientService
+service ClientService {
+  rpc BuyItem(BuyItemRequest) returns (BuyItemResponse);
+  rpc AddToWishlist(AddToWishlistRequest) returns (AddToWishlistResponse);
+  rpc RateItem(RateItemRequest) returns (RateItemResponse);
+  rpc SearchItem(SearchItemRequest) returns (SearchItemResponse);
+}
+
